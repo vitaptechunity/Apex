@@ -1,0 +1,14 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/*.log
+
+# SQLcl / SQL Developer scratch
+*.log
+sqlnet.log
+
+# Anything holding credentials — never commit these
+*.env
+connections.xml
+**/secrets/**

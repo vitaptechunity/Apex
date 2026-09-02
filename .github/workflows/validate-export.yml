@@ -1,0 +1,36 @@
+name: Validate APEX export
+
+on:
+  push:
+    paths:
+      - "apex-apps/**"
+  pull_request:
+    paths:
+      - "apex-apps/**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Every app folder has an application script
+        run: |
+          set -e
+          shopt -s nullglob
+          found=0
+          for app_dir in apex-apps/*/; do
+            [ -f "$app_dir"/application/*.sql ] 2>/dev/null && found=1
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "No application/*.sql found under any apex-apps/<app id>/ folder."
+            exit 1
+          fi
+
+      - name: No stray credentials committed
+        run: |
+          set -e
+          if grep -rIl --exclude-dir=.git -E "password\s*=\s*['\"]" apex-apps/ ; then
+            echo "Found what looks like a hardcoded password in an exported file."
+            exit 1
+          fi
