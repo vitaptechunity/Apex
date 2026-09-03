@@ -12,3 +12,5 @@ sqlnet.log
 *.env
 connections.xml
 **/secrets/**
+tnsnames.ora
+sqlnet.ora
